@@ -44,7 +44,7 @@ parse_reddit_com_json <- function(r) {
   } else {
     before <- NULL
   }
-  d <- tbltools::as_tbl(non_recs(r$data$children$data))
+  d <- as_tbl(non_recs(r$data$children$data))
   d <- formate_createds(d)
   if (!"author_cakeday" %in% names(d)) {
     d$author_cakeday <- rep(FALSE, nrow(d))

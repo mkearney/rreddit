@@ -29,3 +29,7 @@ docall_rbind <- function(...) {
   dfs <- dfs[!duplicated(dfs$id), ]
   dfs
 }
+
+as_tbl <- function(...) {
+  tibble::as_tibble(...)
+}
