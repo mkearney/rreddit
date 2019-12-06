@@ -5,7 +5,7 @@
 \title{Get data from reddit.com}
 \usage{
 get_reddit_com(subreddit = "all", n = 100, after = NULL,
-  before = NULL)
+  before = NULL, verbose = FALSE)
 }
 \arguments{
 \item{subreddit}{Name of subreddit from which to get data. Defaults to "all".}

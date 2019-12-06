@@ -9,12 +9,12 @@
 #' @param before Optional, the parameter from which to start the next search.
 #' @return A data frame of reddit data.
 #' @export
-get_reddit_com <- function(subreddit = "all", n = 100, after = NULL, before = NULL) {
+get_reddit_com <- function(subreddit = "all", n = 100, after = NULL, before = NULL, verbose = FALSE) {
   n <- ceiling(n / 100)
   r <- vector("list", n)
   count <- 0
   for (i in seq_along(r)) {
-    r[[i]] <- get_subreddit_(subreddit, after = after, before = before, count = count)
+    r[[i]] <- get_subreddit_(subreddit, after = after, before = before, count = count, verbose = verbose)
     r[[i]] <- parse_reddit_com_json(r[[i]])
     count <- count + nrow(r[[i]])
     after <- get_after(r[[i]])
@@ -65,10 +65,11 @@ get_before <- function(x) attr(x, "before")
 
 
 get_subreddit_ <- function(subreddit,
-  before = NULL,
-  after = NULL,
-  count = 100,
-  sort = c("relevance", "hot", "top", "new", "comments")) {
+                           before = NULL,
+                           after = NULL,
+                           count = 100,
+                           sort = c("relevance", "hot", "top", "new", "comments"),
+                           verbose = FALSE) {
   sort <- match.arg(sort)
   sort <- "new"
   url <- paste0(
@@ -85,5 +86,6 @@ get_subreddit_ <- function(subreddit,
   if (!is.null(after)) {
     url <- paste0(url, "&after=", after)
   }
+  if(verbose) message(url)
   jsonlite::fromJSON(url)
 }

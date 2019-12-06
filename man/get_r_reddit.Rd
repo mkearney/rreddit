@@ -4,10 +4,30 @@
 \alias{get_r_reddit}
 \title{Get data from pushshift.io}
 \usage{
-get_r_reddit(subreddit = "all", n = 1000, after = NULL)
+get_r_reddit(subreddit = "all", q = NULL, title = NULL,
+  selftext = NULL, author = NULL, is_video = NULL, is_self = NULL,
+  is_original_content = NULL, is_reddit_media_domain = NULL,
+  domain = NULL, link_url = NULL, n = 1000, after = NULL,
+  before = NULL, verbose = FALSE)
 }
 \arguments{
 \item{subreddit}{Name of subreddit from which to get data. Defaults to "all".}
+
+\item{q}{Query term for comments and submissions.}
+
+\item{title}{Search in title only.}
+
+\item{selftext}{Search in selftext (main body) only.}
+
+\item{author}{Restrict results to author - use "!" to negate, comma delimited for multiples.}
+
+\item{is_video}{Boolean - Restrict results based on if submission is video.}
+
+\item{is_self}{Boolean - Restrict results based on if submission is a self post.}
+
+\item{is_original_content}{Boolean - Restrict results based on if submission is original content.}
+
+\item{is_reddit_media_domain}{Boolean - Is Submission hosted on Reddit Media.}
 
 \item{n}{Number of submission/posts to return. Defaults to 1000.}
 
