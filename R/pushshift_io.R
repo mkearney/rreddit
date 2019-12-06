@@ -54,8 +54,8 @@ get_r_reddit <- function(subreddit = "all", q = NULL, title = NULL, selftext = N
     url <- "https://api.pushshift.io/reddit/submission/search/?size=1000"
     if (!identical(subreddit, "all")) url <- paste0(url, "&subreddit=", subreddit)
     if (!is.null(q)) url <- paste0(url, "&q=", urltools::url_encode(q))
-    if (!is.null(title)) url <- paste0(url, "&url=", urltools::url_encode(title))
-    if (!is.null(selftext)) url <- paste0(url, "&url=", urltools::url_encode(selftext))
+    if (!is.null(title)) url <- paste0(url, "&title=", urltools::url_encode(title))
+    if (!is.null(selftext)) url <- paste0(url, "&selftext=", urltools::url_encode(selftext))
     if (!is.null(author)) url <- paste0(url, "&author=", author)
     if (!is.null(is_video)) url <- paste0(url, "&is_video=", tolower(is_video))
     if (!is.null(is_self)) url <- paste0(url, "&is_self=", tolower(is_self))
