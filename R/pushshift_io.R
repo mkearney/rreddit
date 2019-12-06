@@ -3,6 +3,14 @@
 #' Reads/parses reddit data from api.pushshift.io
 #'
 #' @param subreddit Name of subreddit from which to get data. Defaults to "all".
+#' @param q Query term for comments and submissions.
+#' @param title Search in title only.
+#' @param selftext Search in selftext (main body) only.
+#' @param author Restrict results to author - use "!" to negate, comma delimited for multiples.
+#' @param is_video Boolean - Restrict results based on if submission is video.
+#' @param is_self Boolean - Restrict results based on if submission is a self post.
+#' @param is_original_content Boolean - Restrict results based on if submission is original content.
+#' @param is_reddit_media_domain Boolean - Is Submission hosted on Reddit Media.
 #' @param n Number of submission/posts to return. Defaults to 1000.
 #' @param after Optional, the date-time from which to start the next search.
 #' @param before Optional, the date-time from which to start the next search.
@@ -37,20 +45,27 @@
 #' }
 #'
 #' @export
-get_r_reddit <- function(subreddit = "all", n = 1000, after = NULL, before = NULL) {
+get_r_reddit <- function(subreddit = "all", q = NULL, title = NULL, selftext = NULL, author = NULL,
+                         is_video = NULL, is_self = NULL, is_original_content = NULL, is_reddit_media_domain = NULL,
+                         domain = NULL, link_url = NULL, n = 1000, after = NULL, before = NULL, verbose = FALSE) {
   n <- ceiling(n / 1000)
   x <- vector("list", n)
   for (i in seq_along(x)) {
-    url <- "https://api.pushshift.io/reddit/search/submission/?size=1000"
-    if (!identical(subreddit, "all")) {
-      url <- paste0(url, "&subreddit=", subreddit)
-    }
-    if (!is.null(before)) {
-      url <- paste0(url, "&before=", as.numeric(before))
-    }
-    if (!is.null(after)) {
-      url <- paste0(url, "&after=", as.numeric(after))
-    }
+    url <- "https://api.pushshift.io/reddit/submission/search/?size=1000"
+    if (!identical(subreddit, "all")) url <- paste0(url, "&subreddit=", subreddit)
+    if (!is.null(q)) url <- paste0(url, "&q=", urltools::url_encode(q))
+    if (!is.null(title)) url <- paste0(url, "&url=", urltools::url_encode(title))
+    if (!is.null(selftext)) url <- paste0(url, "&url=", urltools::url_encode(selftext))
+    if (!is.null(author)) url <- paste0(url, "&author=", author)
+    if (!is.null(is_video)) url <- paste0(url, "&is_video=", tolower(is_video))
+    if (!is.null(is_self)) url <- paste0(url, "&is_self=", tolower(is_self))
+    if (!is.null(is_original_content)) url <- paste0(url, "&is_original_content=", tolower(is_original_content))
+    if (!is.null(is_reddit_media_domain)) url <- paste0(url, "&is_reddit_media_domain=", tolower(is_reddit_media_domain))
+    if (!is.null(domain)) url <- paste0(url, "&domain=", urltools::url_encode(domain))
+    if (!is.null(link_url)) url <- paste0(url, "&url=", urltools::url_encode(link_url))
+    if (!is.null(before)) url <- paste0(url, "&before=", as.numeric(before))
+    if (!is.null(after)) url <- paste0(url, "&after=", as.numeric(after))
+    if(verbose) message(url)
     r <- httr::GET(url)
     j <- httr::content(r, as = "text", encoding = "UTF-8")
     j <- jsonlite::fromJSON(j)
@@ -109,7 +124,7 @@ get_r_reddit <- function(subreddit = "all", n = 1000, after = NULL, before = NUL
 #' }
 #'
 #' @export
-get_comment_reddit <- function(subreddit = "all", author = NULL, n = 1000, after = NULL, before = NULL) {
+get_comment_reddit <- function(subreddit = "all", n = 1000, after = NULL, before = NULL, verbose = FALSE) {
   n <- ceiling(n / 1000)
   x <- vector("list", n)
   for (i in seq_along(x)) {
@@ -117,15 +132,13 @@ get_comment_reddit <- function(subreddit = "all", author = NULL, n = 1000, after
     if (!identical(subreddit, "all")) {
       url <- paste0(url, "&subreddit=", subreddit)
     }
-    if (!is.null(author)) {
-      url <- paste0(url, "&author=", author)
-    }
     if (!is.null(before)) {
       url <- paste0(url, "&before=", as.numeric(before))
     }
     if (!is.null(after)) {
       url <- paste0(url, "&after=", as.numeric(after))
     }
+    if(verbose) message(url)
     r <- httr::GET(url)
     j <- httr::content(r, as = "text", encoding = "UTF-8")
     j <- jsonlite::fromJSON(j)

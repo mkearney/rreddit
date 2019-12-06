@@ -4,19 +4,19 @@
 \alias{get_comment_reddit}
 \title{Get comments from pushshift.io}
 \usage{
-get_comment_reddit(subreddit = "all", author = NULL, n = 1000,
-  after = NULL)
+get_comment_reddit(subreddit = "all", n = 1000, after = NULL,
+  before = NULL, verbose = FALSE)
 }
 \arguments{
 \item{subreddit}{Name of subreddit from which to get data. Defaults to "all".}
-
-\item{author}{Restrict results to author.}
 
 \item{n}{Number of submission/posts to return. Defaults to 1000.}
 
 \item{after}{Optional, the date-time from which to start the next search.}
 
 \item{before}{Optional, the date-time from which to start the next search.}
+
+\item{author}{Restrict results to author.}
 }
 \value{
 A data frame of reddit data.
